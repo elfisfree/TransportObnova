@@ -1,0 +1,167 @@
+using System;
+using System.Collections.Generic;
+using Pr100.Classes;
+
+namespace Pr100
+{
+    abstract class Transport
+    {
+        public string Speed { get; set; }
+        public string Color { get; set; }
+        public string Model { get; set; }
+        public string LicenseCategory { get; set; }
+        public bool IsRented { get; set; }
+
+        public Transport(string speed, string color, string model, string licenseCategory, bool isRented)
+        {
+            Speed = speed;
+            Color = color;
+            Model = model;
+            LicenseCategory = licenseCategory;
+            IsRented = isRented;
+        }
+
+        protected Transport(string speed, string color, string model, string licenseCategory)
+        {
+            Speed = speed;
+            Color = color;
+            Model = model;
+            LicenseCategory = licenseCategory;
+        }
+
+        public abstract void PrintInfo();
+    }
+
+    class Boat : Transport
+    {
+        public string Engine { get; set; }
+        public new bool IsRented { get; set; }
+        public Boat(string speed, string color, string model, string licenseCategory, string engine, bool isRented)
+        : base(speed, color, model, licenseCategory, isRented)
+        {
+            Engine = engine;
+            IsRented = isRented;
+        }
+
+        public override void PrintInfo()
+        {
+            Console.WriteLine($"Boat: {Model}, Speed: {Speed}, Color: {Color}, License Category: {LicenseCategory}, Is Rented: {(IsRented ? "Yes" : "No")}| Engine: {(Engine)}");
+        }
+    }
+
+    class Bicycle : Transport
+    {
+        public new bool IsRented { get; set; }
+        public Bicycle(string speed, string color, string model, string licenseCategory, bool isRented)
+            : base(speed, color, model, licenseCategory, isRented)
+        {
+            IsRented = isRented;
+        }
+
+        public override void PrintInfo()
+        {
+            Console.WriteLine($"Bicycle: {Model}, Speed: {Speed}, Color: {Color}, License Category: {LicenseCategory}, Is Rented: {(IsRented ? "Yes" : "No")}");
+        }
+    }
+
+    class Motorcycle : Transport
+    {
+        public string NumberOfWheels { get; set; }
+        public string Engine { get; set; }
+        public new bool IsRented { get; set; }
+
+        public Motorcycle(string speed, string color, string model, string licenseCategory, string numberOfWheels, string engine, bool isRented)
+            : base(speed, color, model, licenseCategory, isRented)
+        {
+            NumberOfWheels = numberOfWheels;
+            Engine = engine;
+            IsRented = isRented;
+        }
+
+        public override void PrintInfo()
+        {
+            Console.WriteLine($"Motorcycle: {Model}, Speed: {Speed}, Color: {Color}, License Category: {LicenseCategory}, Number of Wheels: {NumberOfWheels}, Engine: {Engine}, Is Rented: {(IsRented ? "Yes" : "No")}");
+        }
+    }
+
+    class Scooter : Transport
+    {
+        public string NumberOfWheels { get; set; }
+        public string Engine { get; set; }
+        public new bool IsRented { get; set; }
+
+        public Scooter(string speed, string color, string model, string licenseCategory, string numberOfWheels, string engine, bool isRented)
+            : base(speed, color, model, licenseCategory, isRented)
+        {
+            NumberOfWheels = numberOfWheels;
+            Engine = engine;
+            IsRented = isRented;
+        }
+
+        public override void PrintInfo()
+        {
+            Console.WriteLine($"Scooter: {Model}, Speed: {Speed}, Color: {Color}, License Category: {LicenseCategory}, Number of Wheels: {NumberOfWheels}, Engine: {Engine}, Is Rented: {(IsRented ? "Yes" : "No")}");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Transport> transports = new List<Transport>();
+
+            transports.Add(new Boat("187 km/h", "Blue", "sea ray", "Do not need", "Gas", true));
+            transports.Add(new Boat("152 km/h", "White and Black", "victory 570", "Do not need", "Gas", false));
+            transports.Add(new Car("220 km/h", "Red", "porsche 911", "B", "4", "Gas", true));
+            transports.Add(new Car("190 km/h", "Black", "mercedes-benz s-class", "B", "4", "Gas", true));
+            transports.Add(new Bicycle("35 km/h", "Green and White", "scott addict", "Be above 14 y.old", true));
+            transports.Add(new Bicycle("15 km/h", "Blue and White", "novatrack juster", "Be under 60 kg", false));
+            transports.Add(new Motorcycle("160 km/h", "Black", "harley davidson", "A", "2", "Gas", false));
+            transports.Add(new Motorcycle("80 km/h", "Black and Deep Red", "alrendo ts", "A", "2", "Electric", true));
+            transports.Add(new Scooter("35 km/h", "Red", "kugoo 3", "Be above 60 kg", "2", "Electric", false));
+            transports.Add(new Scooter("40 km/h", "Yellow", "xiaomi", "Be under 60 kg", "2", "Electric", false));
+
+            foreach (Transport transport in transports)
+            {
+                transport.PrintInfo();
+            }
+
+            string modelName = "";
+            while (modelName != "exit")
+            {
+                Console.WriteLine("Enter the model of the transport you want to check if it is rented or not (or type 'exit' to exit):");
+                modelName = Console.ReadLine();
+
+                if (modelName != "exit")
+                {
+                    foreach (Transport transport in transports)
+                    {
+                        if (transport.Model == modelName)
+                        {
+                            Console.WriteLine($"Transport: {modelName}, Is Rented: {(transport.IsRented)}");
+                            if (transport.IsRented == false)
+                            {
+                                Console.WriteLine("Do you want to rent " + transport.Model + "?");
+                                string Answer = Console.ReadLine();
+                                if (Answer.ToLower() == "yes")
+                                {
+                                    Console.WriteLine(transport.Model + " has been rented by you");
+                                    transport.IsRented = true;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Sorry, but " + transport.Model + " is already taken");
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
